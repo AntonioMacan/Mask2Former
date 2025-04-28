@@ -113,12 +113,17 @@ class MSDeformAttn(nn.Module):
         else:
             raise ValueError(
                 'Last dim of reference_points must be 2 or 4, but get {} instead.'.format(reference_points.shape[-1]))
+        # COMMENT THIS WHEN CONVERTING TO ONNX
         try:
             output = MSDeformAttnFunction.apply(
                 value, input_spatial_shapes, input_level_start_index, sampling_locations, attention_weights, self.im2col_step)
         except:
             # CPU
             output = ms_deform_attn_core_pytorch(value, input_spatial_shapes, sampling_locations, attention_weights)
+        # COMMENT THIS WHEN CONVERTING TO ONNX
+        # # UNCOMMENT THIS WHEN CONVERTING TO ONNX
+        # output = ms_deform_attn_core_pytorch(value, input_spatial_shapes, sampling_locations, attention_weights)
+        # # UNCOMMENT THIS WHEN CONVERTING TO ONNX
         # # For FLOPs calculation only
         # output = ms_deform_attn_core_pytorch(value, input_spatial_shapes, sampling_locations, attention_weights)
         output = self.output_proj(output)

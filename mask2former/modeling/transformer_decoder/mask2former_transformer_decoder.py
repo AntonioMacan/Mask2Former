@@ -395,7 +395,18 @@ class MultiScaleMaskedTransformerDecoder(nn.Module):
 
         for i in range(self.num_layers):
             level_index = i % self.num_feature_levels
+            # COMMENT THIS WHEN CONVERTING TO ONNX
             attn_mask[torch.where(attn_mask.sum(-1) == attn_mask.shape[-1])] = False
+            # COMMENT THIS WHEN CONVERTING TO ONNX
+            # # UNCOMMENT THIS WHEN CONVERTING TO ONNX
+            # row_sums = attn_mask.sum(-1)
+            # row_mask = row_sums == attn_mask.shape[-1]
+            # attn_mask = torch.where(
+            #     row_mask.unsqueeze(-1),
+            #     torch.tensor(False).to(attn_mask.device),
+            #     attn_mask
+            # )
+            # # UNCOMMENT THIS WHEN CONVERTING TO ONNX
             # attention: cross-attention first
             output = self.transformer_cross_attention_layers[i](
                 output, src[level_index],
