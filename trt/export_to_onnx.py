@@ -8,7 +8,7 @@ from mask2former import add_maskformer2_config
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Export MaskFormer model to ONNX')
+    parser = argparse.ArgumentParser(description='Export Mask2Former model to ONNX')
     parser.add_argument('--config-file', type=str,
                         default='configs/cityscapes/semantic-segmentation/maskformer2_R101_bs16_90k.yaml',
                         help='Path to the config file')
